@@ -720,6 +720,9 @@
                         <Component class="javax.swing.JTable" name="stockTable">
                           <Properties>
                             <Property name="autoCreateRowSorter" type="boolean" value="true"/>
+                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                              <Table columnCount="0" rowCount="0"/>
+                            </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                               <TableColumnModel selectionModel="0">
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
@@ -1010,7 +1013,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="171" max="-2" attributes="0"/>
-                                  <Component id="ADD" min="-2" pref="107" max="-2" attributes="0"/>
+                                  <Component id="addStaff" min="-2" pref="107" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
                                   <Component id="UPDATE" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
@@ -1098,7 +1101,7 @@
                           <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="UPDATE" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="ADD" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="addStaff" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="DELETE" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="CLEAR" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -1273,7 +1276,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CLEARActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="ADD">
+                <Component class="javax.swing.JButton" name="addStaff">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="66" green="66" red="0" type="rgb"/>
@@ -1287,7 +1290,7 @@
                     <Property name="text" type="java.lang.String" value="ADD"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ADDActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addStaffActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="UPDATE">
@@ -1359,7 +1362,7 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JTable" name="TABLE">
+                        <Component class="javax.swing.JTable" name="staffTable">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                               <Table columnCount="4" rowCount="4">
@@ -1371,7 +1374,7 @@
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="TABLEMouseClicked"/>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="staffTableMouseClicked"/>
                           </Events>
                         </Component>
                       </SubComponents>

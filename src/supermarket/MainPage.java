@@ -14,6 +14,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,41 +25,42 @@ import javax.swing.table.TableRowSorter;
 public class MainPage extends javax.swing.JFrame
 {
         ImageIcon logo=new ImageIcon("D:\\Projects\\NetBeansProjects\\SupermarketAlone2\\src\\supermarket\\pictures\\IMG_20231201_090351_245-250x250.png");
-        private String[] columnNames
-            = {"Country", "Capital", "Population in Millions", "Democracy"};
         private String[] staffColumns
-            = {"ID", "Name", "Gender", "Phone", "Salary", "Address"};
-        private Object[][] data = {
-            {"USA", "Washington DC", 280, true},
-            {"Canada", "Ottawa", 32, true},
-            {"United Kingdom", "London", 60, true},
-            {"Germany", "Berlin", 83, true},
-            {"France", "Paris", 60, true},
-            {"Norway", "Oslo", 4.5, true},
-            {"India", "New Delhi", 1046, true}
-        };
-        private DefaultTableModel model = new DefaultTableModel(data, columnNames);
-        DefaultTableModel staffModel;
-
+            = {"ID", "Name", "Gender", "Address", "Phone", "Salary"};
+        private String[] stockColumns
+            = {"ID", "Name", "Price", "Quantity","Category"};
+        DefaultTableModel staffModel,stockModel;
+        Connection conn;
 
     /**
      * Creates new form MainPage
      */
     public MainPage()
     {
-        initComponents();
-        setTitle("Supermarket Management System");
-        setLocationRelativeTo(null);
-        setIconImage(logo.getImage());
-        stockTable.setModel(model);
         
-        staffModel = new DefaultTableModel(null,staffColumns);
-//        staffModel.addColumn("EMP_ID");
-//        staffModel.addColumn("EMP_NAME");
-//        staffModel.addColumn("GENDER");
-//        staffModel.addColumn("PHONE");
-//        staffModel.addColumn("SALARY");
-//        staffModel.addColumn("ADDRESS");
+                initComponents();
+                setTitle("Supermarket Management System");
+                setLocationRelativeTo(null);
+                setIconImage(logo.getImage());
+//                staffModel = new DefaultTableModel(null,staffColumns);
+                stockModel = new DefaultTableModel(null,stockColumns);
+                staffModel = new DefaultTableModel(null,staffColumns);
+            try
+            {
+                conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarketMS","root","root");
+                try
+                {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            fillStockTable();
+            fillStaffTable();
     }
 
     /**
@@ -130,12 +134,12 @@ public class MainPage extends javax.swing.JFrame
         jLabel25 = new javax.swing.JLabel();
         TB_ADDRESS = new javax.swing.JTextField();
         CLEAR = new javax.swing.JButton();
-        ADD = new javax.swing.JButton();
+        addStaff = new javax.swing.JButton();
         UPDATE = new javax.swing.JButton();
         DELETE = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        TABLE = new javax.swing.JTable();
+        staffTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -524,6 +528,16 @@ public class MainPage extends javax.swing.JFrame
         jPanel1.setBackground(new java.awt.Color(0, 102, 102));
 
         stockTable.setAutoCreateRowSorter(true);
+        stockTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+
+            }
+        ));
         jScrollPane1.setViewportView(stockTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -803,15 +817,15 @@ public class MainPage extends javax.swing.JFrame
             }
         });
 
-        ADD.setBackground(new java.awt.Color(0, 102, 102));
-        ADD.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        ADD.setForeground(new java.awt.Color(255, 255, 255));
-        ADD.setText("ADD");
-        ADD.addActionListener(new java.awt.event.ActionListener()
+        addStaff.setBackground(new java.awt.Color(0, 102, 102));
+        addStaff.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        addStaff.setForeground(new java.awt.Color(255, 255, 255));
+        addStaff.setText("ADD");
+        addStaff.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                ADDActionPerformed(evt);
+                addStaffActionPerformed(evt);
             }
         });
 
@@ -841,7 +855,7 @@ public class MainPage extends javax.swing.JFrame
 
         jPanel5.setBackground(new java.awt.Color(0, 102, 102));
 
-        TABLE.setModel(new javax.swing.table.DefaultTableModel(
+        staffTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
                 {null, null, null, null},
@@ -854,14 +868,14 @@ public class MainPage extends javax.swing.JFrame
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        TABLE.addMouseListener(new java.awt.event.MouseAdapter()
+        staffTable.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                TABLEMouseClicked(evt);
+                staffTableMouseClicked(evt);
             }
         });
-        jScrollPane4.setViewportView(TABLE);
+        jScrollPane4.setViewportView(staffTable);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -888,7 +902,7 @@ public class MainPage extends javax.swing.JFrame
                 .addGroup(staffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(staffLayout.createSequentialGroup()
                         .addGap(171, 171, 171)
-                        .addComponent(ADD, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(81, 81, 81)
                         .addComponent(UPDATE)
                         .addGap(73, 73, 73)
@@ -955,7 +969,7 @@ public class MainPage extends javax.swing.JFrame
                 .addGap(54, 54, 54)
                 .addGroup(staffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(UPDATE)
-                    .addComponent(ADD)
+                    .addComponent(addStaff)
                     .addComponent(DELETE)
                     .addComponent(CLEAR))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -997,7 +1011,41 @@ public class MainPage extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-         
+       
+    void fillStockTable()
+    {
+            try
+            {
+                stockModel.setRowCount(0);
+                PreparedStatement stmt= conn.prepareStatement("select prdct_id,prdct_name,prdct_price,prdct_quantity,cat_name from category,stock where stock.cat_id=category.cat_id");
+                ResultSet rs = stmt.executeQuery();
+                while(rs.next())
+                {
+                    stockModel.addRow(new Object[]{rs.getInt(1),rs.getString(2),rs.getDouble(3),rs.getInt(4),rs.getString(5)});
+                }
+                stockTable.setModel(stockModel);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    void fillStaffTable()
+    {
+        try
+            {
+                staffModel.setRowCount(0);
+                PreparedStatement stmt= conn.prepareStatement("select * from staff");
+                ResultSet rs = stmt.executeQuery();
+                while(rs.next())
+                {
+                    staffModel.addRow(new Object[]{rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getDouble(6)});
+                }
+                staffTable.setModel(staffModel);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
     void search(javax.swing.JTable tbl,javax.swing.JTextField txt)
     {
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(tbl.getModel());
@@ -1166,66 +1214,86 @@ public class MainPage extends javax.swing.JFrame
         COM_GENDER.setSelectedIndex(0);
     }//GEN-LAST:event_CLEARActionPerformed
 
-    private void ADDActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ADDActionPerformed
-    {//GEN-HEADEREND:event_ADDActionPerformed
-        if(!TB_ID.getText().isEmpty()&&!TB_PHONE.getText().isEmpty()&&!TB_SALARY.getText().isEmpty()&&!TB_NAME.getText().isEmpty()&&!TB_ADDRESS.getText().isEmpty()) 
-            //REMEMBER TO REMOVE ID ISEMPTY IN CONNECTION
-        {
-            int id = Integer.parseInt(TB_ID.getText());
-            int salary = Integer.parseInt(TB_SALARY.getText());
-            String phone = TB_PHONE.getText();
-            String name = TB_NAME.getText();
-            String address = TB_ADDRESS.getText();
-            String gender = COM_GENDER.getSelectedItem().toString();
-            staffModel.addRow(new Object[]{id, name, gender, phone, salary, address});
-            TABLE.setModel(staffModel);
+    private void addStaffActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_addStaffActionPerformed
+    {//GEN-HEADEREND:event_addStaffActionPerformed
+        if(!TB_PHONE.getText().isEmpty()&&!TB_SALARY.getText().isEmpty()&&!TB_NAME.getText().isEmpty()&&!TB_ADDRESS.getText().isEmpty()) 
+                    {
+            try { //REMEMBER TO REMOVE ID ISEMPTY IN CONNECTION
+                //            int id = Integer.parseInt(TB_ID.getText());
+                double salary = Double.parseDouble(TB_SALARY.getText());
+                String phone = TB_PHONE.getText();
+                String name = TB_NAME.getText();
+                String address = TB_ADDRESS.getText();
+                String gender = COM_GENDER.getSelectedItem().toString();
+                
+                PreparedStatement stmt = conn.prepareStatement("insert into staff (emp_name,emp_gender,emp_address,emp_phone,emp_salary) values (?,?,?,?,?)");
+                stmt.setString(1, name);
+                stmt.setString(2, gender);
+                stmt.setString(3, address);
+                stmt.setString(4, phone);
+                stmt.setDouble(5, salary);
+                stmt.executeUpdate();
+                fillStaffTable();
+            } catch (SQLException ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else JOptionPane.showMessageDialog(this, "Please fill all fields");
-    }//GEN-LAST:event_ADDActionPerformed
+    }//GEN-LAST:event_addStaffActionPerformed
 
     private void UPDATEActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_UPDATEActionPerformed
     {//GEN-HEADEREND:event_UPDATEActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel tbl = (DefaultTableModel) TABLE.getModel();
-        if (TABLE.getSelectedRowCount() == 1)
+        DefaultTableModel tbl = (DefaultTableModel) staffTable.getModel();
+        if (staffTable.getSelectedRowCount() == 1)
         {
-            tbl.setValueAt(TB_ID.getText(), TABLE.getSelectedRow(), 0);
-            tbl.setValueAt(TB_NAME.getText(), TABLE.getSelectedRow(), 1);
-            tbl.setValueAt(COM_GENDER.getSelectedItem().toString(), TABLE.getSelectedRow(), 2);
-            tbl.setValueAt(TB_PHONE.getText(), TABLE.getSelectedRow(), 3);
-            tbl.setValueAt(TB_SALARY.getText(), TABLE.getSelectedRow(), 4);
-            tbl.setValueAt(TB_ADDRESS.getText(), TABLE.getSelectedRow(), 5);
-            JOptionPane.showMessageDialog(this, "Update successfully");
+            try {
+                PreparedStatement stmt = conn.prepareStatement("update staff set emp_name=?,emp_gender=?,emp_address=?,emp_phone=?,emp_salary=? where emp_id = ?");
+                int id=Integer.parseInt(staffTable.getValueAt(staffTable.getSelectedRow(), 0).toString());
+                stmt.setString(1, TB_NAME.getText());
+                stmt.setString(2, COM_GENDER.getSelectedItem().toString());
+                stmt.setString(3, TB_ADDRESS.getText());
+                stmt.setString(4, TB_PHONE.getText());
+                stmt.setDouble(5, Double.parseDouble(TB_SALARY.getText()));
+                stmt.setInt(6, id);
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Updated successfully");
+                fillStaffTable();
+            } catch (SQLException ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else
         {
-            if (TABLE.getRowCount() == 0) JOptionPane.showMessageDialog(this, "Table is empty"); 
+            if (staffTable.getRowCount() == 0) JOptionPane.showMessageDialog(this, "Table is empty"); 
             else JOptionPane.showMessageDialog(this, "Please select a row to update");
         }
     }//GEN-LAST:event_UPDATEActionPerformed
 
     private void DELETEActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DELETEActionPerformed
     {//GEN-HEADEREND:event_DELETEActionPerformed
-        DefaultTableModel tbl = (DefaultTableModel) TABLE.getModel();
-        if (TABLE.getSelectedRowCount() == 1)
-            tbl.removeRow(TABLE.getSelectedRow());
-        else
-        {
-            if (TABLE.getRowCount() == 0) JOptionPane.showMessageDialog(this, "Table is empty");
-            else JOptionPane.showMessageDialog(this, "Please select a row to delete");
-        }
+            try
+            {
+                int id=Integer.parseInt(staffTable.getValueAt(staffTable.getSelectedRow(), 0).toString());
+                PreparedStatement stmt= conn.prepareStatement("delete from staff where emp_id = ?");
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+                fillStaffTable();
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_DELETEActionPerformed
 
-    private void TABLEMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_TABLEMouseClicked
-    {//GEN-HEADEREND:event_TABLEMouseClicked
-        DefaultTableModel tbl = (DefaultTableModel) TABLE.getModel();
-        TB_ID.setText(tbl.getValueAt(TABLE.getSelectedRow(), 0).toString());
-        TB_NAME.setText(tbl.getValueAt(TABLE.getSelectedRow(), 1).toString());
-        COM_GENDER.setSelectedItem(tbl.getValueAt(TABLE.getSelectedRow(), 2).toString());
-        TB_PHONE.setText(tbl.getValueAt(TABLE.getSelectedRow(), 3).toString());
-        TB_SALARY.setText(tbl.getValueAt(TABLE.getSelectedRow(), 4).toString());
-        TB_ADDRESS.setText(tbl.getValueAt(TABLE.getSelectedRow(), 5).toString());
-    }//GEN-LAST:event_TABLEMouseClicked
+    private void staffTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_staffTableMouseClicked
+    {//GEN-HEADEREND:event_staffTableMouseClicked
+        DefaultTableModel tbl = (DefaultTableModel) staffTable.getModel();
+        TB_ID.setText(tbl.getValueAt(staffTable.getSelectedRow(), 0).toString());
+        TB_NAME.setText(tbl.getValueAt(staffTable.getSelectedRow(), 1).toString());
+        COM_GENDER.setSelectedItem(tbl.getValueAt(staffTable.getSelectedRow(), 2).toString());
+        TB_PHONE.setText(tbl.getValueAt(staffTable.getSelectedRow(), 3).toString());
+        TB_SALARY.setText(tbl.getValueAt(staffTable.getSelectedRow(), 4).toString());
+        TB_ADDRESS.setText(tbl.getValueAt(staffTable.getSelectedRow(), 5).toString());
+    }//GEN-LAST:event_staffTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1273,12 +1341,10 @@ public class MainPage extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ADD;
     private javax.swing.JPanel ButtonPanel;
     private javax.swing.JButton CLEAR;
     private javax.swing.JComboBox<String> COM_GENDER;
     private javax.swing.JButton DELETE;
-    private javax.swing.JTable TABLE;
     private javax.swing.JTextField TB_ADDRESS;
     private javax.swing.JTextField TB_ID;
     private javax.swing.JTextField TB_NAME;
@@ -1287,6 +1353,7 @@ public class MainPage extends javax.swing.JFrame
     private javax.swing.JButton UPDATE;
     private javax.swing.JPanel addProduct;
     private javax.swing.JLabel addProductBtn;
+    private javax.swing.JButton addStaff;
     private javax.swing.JPanel billing;
     private javax.swing.JLabel billingBtn;
     private javax.swing.JTable billingTbl;
@@ -1336,6 +1403,7 @@ public class MainPage extends javax.swing.JFrame
     private javax.swing.JPanel splashScreen;
     private javax.swing.JPanel staff;
     private javax.swing.JLabel staffBtn;
+    private javax.swing.JTable staffTable;
     private javax.swing.JPanel stock;
     private javax.swing.JLabel stockBtn;
     private javax.swing.JTextField stockSearchBar;
