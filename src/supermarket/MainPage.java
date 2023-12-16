@@ -1611,9 +1611,9 @@ public class MainPage extends javax.swing.JFrame
         DefaultTableModel tbl = (DefaultTableModel) staffTable.getModel();
         TB_NAME.setText(tbl.getValueAt(staffTable.getSelectedRow(), 1).toString());
         COM_GENDER.setSelectedItem(tbl.getValueAt(staffTable.getSelectedRow(), 2).toString());
-        TB_PHONE.setText(tbl.getValueAt(staffTable.getSelectedRow(), 3).toString());
-        TB_SALARY.setText(tbl.getValueAt(staffTable.getSelectedRow(), 4).toString());
-        TB_ADDRESS.setText(tbl.getValueAt(staffTable.getSelectedRow(), 5).toString());
+        TB_PHONE.setText(tbl.getValueAt(staffTable.getSelectedRow(), 4).toString());
+        TB_SALARY.setText(tbl.getValueAt(staffTable.getSelectedRow(), 5).toString());
+        TB_ADDRESS.setText(tbl.getValueAt(staffTable.getSelectedRow(), 3).toString());
     }//GEN-LAST:event_staffTableMouseClicked
 
     private void jButton5Update(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton5Update
