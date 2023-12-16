@@ -1660,7 +1660,7 @@ public class MainPage extends javax.swing.JFrame
     private void jButton7clear(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton7clear
     {//GEN-HEADEREND:event_jButton7clear
         TB_PRODID.setText("");
-        TB_NAME.setText("");
+        TB_NAME1.setText("");
         TB_QUANTITY.setText("");
         TB_PRICE.setText("");
         COM_CATEGORY.setSelectedItem("");
