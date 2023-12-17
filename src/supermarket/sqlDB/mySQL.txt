@@ -1,0 +1,24 @@
+create database supermarketMS;
+create table staff(emp_id int primary key auto_increment,emp_name varchar(30) not null,emp_gender varchar(10),emp_address varchar(50),emp_phone varchar(15),emp_salary double);
+insert into staff values (1,'Maryam','Female','Address','phone',1100);
+#select * from staff;
+
+create table category(cat_id int primary key auto_increment,cat_name varchar(30));
+insert into category values (1,'Meats');
+insert into category (cat_name) values ('Milk');
+#select * from category;
+
+create table stock(prdct_id int primary key,prdct_name varchar(30),prdct_price double,prdct_quantity int default 1);
+insert into stock values (112,'name',400,2);
+insert into stock (prdct_id,prdct_name,prdct_price) values (113,'name2',400);
+update stock set cat_id=1 where prdct_id=112;
+update stock set cat_id=2 where prdct_id=113;
+#select * from stock;
+alter table stock add column (cat_id int references category(cat_id));
+
+
+
+create table login(user varchar(30) primary key,pass varchar(20));
+insert into login values ('Maryam','root');
+#select * from login;
+
