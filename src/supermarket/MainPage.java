@@ -21,7 +21,8 @@ import javax.swing.JTable;
 
 /**
  *
- * @author PC
+ * @author Maryam, Yasmine Raef, Yasmine Hosny, Wessam, Youssef
+ * 
  */
 public class MainPage extends javax.swing.JFrame
 {
@@ -36,16 +37,15 @@ public class MainPage extends javax.swing.JFrame
     /**
      * Creates new form MainPage
      */
+        
     public MainPage()
     {
-        
-                initComponents();
-                setTitle("Supermarket Management System");
-                setLocationRelativeTo(null);
-                setIconImage(logo.getImage());
-//                staffModel = new DefaultTableModel(null,staffColumns);
-                stockModel = new DefaultTableModel(null,stockColumns);
-                staffModel = new DefaultTableModel(null,staffColumns);
+            initComponents();
+            setTitle("Supermarket Management System");
+            setLocationRelativeTo(null);
+            setIconImage(logo.getImage());
+            stockModel = new DefaultTableModel(null,stockColumns);
+            staffModel = new DefaultTableModel(null,staffColumns);
             try
             {
                 conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarketMS","root","root");
