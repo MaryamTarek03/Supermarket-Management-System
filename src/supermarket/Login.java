@@ -4,7 +4,11 @@
  */
 package supermarket;
 
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,6 +17,7 @@ import javax.swing.ImageIcon;
 public class Login extends javax.swing.JFrame
 {
     ImageIcon logo=new ImageIcon("D:\\Projects\\NetBeansProjects\\Supermarket\\src\\supermarket\\pictures\\IMG_20231201_090351_245-250x250.png");
+    Connection conn;
     /**
      * Creates new form Login
      */
@@ -21,6 +26,20 @@ public class Login extends javax.swing.JFrame
         initComponents();
         setLocationRelativeTo(null);
         setIconImage(logo.getImage());
+        try
+            {
+                conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarketMS","root","root");
+                try
+                {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
 
     /**
@@ -36,10 +55,10 @@ public class Login extends javax.swing.JFrame
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         passwordLogin = new javax.swing.JPasswordField();
-        jTextField1 = new javax.swing.JTextField();
+        userLogin = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        login = new javax.swing.JButton();
         toRegisterForm = new javax.swing.JLabel();
         showPassLogin = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
@@ -63,7 +82,7 @@ public class Login extends javax.swing.JFrame
             }
         });
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        userLogin.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -73,15 +92,15 @@ public class Login extends javax.swing.JFrame
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Password");
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setText("Login");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
+        login.setBackground(new java.awt.Color(255, 255, 255));
+        login.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        login.setForeground(new java.awt.Color(0, 0, 0));
+        login.setText("Login");
+        login.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jButton1ActionPerformed(evt);
+                loginActionPerformed(evt);
             }
         });
 
@@ -121,7 +140,7 @@ public class Login extends javax.swing.JFrame
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(showPassLogin))
-                    .addComponent(jTextField1)
+                    .addComponent(userLogin)
                     .addComponent(passwordLogin, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(29, 29, 29))
             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -132,7 +151,7 @@ public class Login extends javax.swing.JFrame
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(83, 83, 83)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(login, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(102, 102, 102)
                         .addComponent(jLabel3))
@@ -150,7 +169,7 @@ public class Login extends javax.swing.JFrame
                 .addGap(72, 72, 72)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(userLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -158,7 +177,7 @@ public class Login extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(showPassLogin)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(login, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -217,11 +236,28 @@ public class Login extends javax.swing.JFrame
         new SignUp().setVisible(true);
     }//GEN-LAST:event_toRegisterFormMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
-    {//GEN-HEADEREND:event_jButton1ActionPerformed
-        this.dispose();
-        new MainPage().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void loginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_loginActionPerformed
+    {//GEN-HEADEREND:event_loginActionPerformed
+            String txtUser= userLogin.getText();
+            var txtPass= passwordLogin.getText();
+        try
+        {
+            if(txtUser!=null)
+            {
+                PreparedStatement stmt= conn.prepareStatement("select * from login where user="+'"'+txtUser+'"');
+                ResultSet rs=stmt.executeQuery();
+                if(rs.next()&&(rs.getString(2) == null ? passwordLogin.getText() == null : rs.getString(2).equals(passwordLogin.getText())))
+                {
+                        this.dispose();
+                        new MainPage().setVisible(true);
+                }
+                else JOptionPane.showMessageDialog(this, "Incorrect username or password");
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_loginActionPerformed
 
     private void passwordLogin(java.awt.event.ActionEvent evt)//GEN-FIRST:event_passwordLogin
     {//GEN-HEADEREND:event_passwordLogin
@@ -280,7 +316,6 @@ public class Login extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -288,9 +323,10 @@ public class Login extends javax.swing.JFrame
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton login;
     private javax.swing.JPasswordField passwordLogin;
     private javax.swing.JCheckBox showPassLogin;
     private javax.swing.JLabel toRegisterForm;
+    private javax.swing.JTextField userLogin;
     // End of variables declaration//GEN-END:variables
 }

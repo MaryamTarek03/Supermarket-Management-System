@@ -4,7 +4,11 @@
  */
 package supermarket;
 
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +22,7 @@ public class SignUp extends javax.swing.JFrame
     /**
      * Creates new form Sing
      */
+    Connection conn;
     void showPass(javax.swing.JCheckBox c,javax.swing.JPasswordField p)
     {
         if (c.isSelected()) p.setEchoChar((char)0);
@@ -29,6 +34,20 @@ public class SignUp extends javax.swing.JFrame
         setLocationRelativeTo(null);
         setIconImage(logo.getImage());
         setTitle("Supermarket Management System");
+        try
+            {
+                conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/supermarketMS","root","root");
+                try
+                {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
 
     /**
@@ -44,11 +63,11 @@ public class SignUp extends javax.swing.JFrame
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         passField = new javax.swing.JPasswordField();
-        jTextField1 = new javax.swing.JTextField();
+        userSign = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         signUp = new javax.swing.JButton();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        cPassField = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
         backLogin = new javax.swing.JLabel();
         showPass = new javax.swing.JCheckBox();
@@ -67,7 +86,7 @@ public class SignUp extends javax.swing.JFrame
 
         passField.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        userSign.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -89,7 +108,7 @@ public class SignUp extends javax.swing.JFrame
             }
         });
 
-        jPasswordField2.setBackground(new java.awt.Color(255, 255, 255));
+        cPassField.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -135,12 +154,12 @@ public class SignUp extends javax.swing.JFrame
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(showPass)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cPassField, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(showPass1)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(userSign, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(passField)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))))
@@ -161,7 +180,7 @@ public class SignUp extends javax.swing.JFrame
                 .addContainerGap(39, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(userSign, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -171,7 +190,7 @@ public class SignUp extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cPassField, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(showPass)
                 .addGap(18, 18, 18)
@@ -230,13 +249,34 @@ public class SignUp extends javax.swing.JFrame
 
     private void signUpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_signUpActionPerformed
     {//GEN-HEADEREND:event_signUpActionPerformed
-        this.dispose();
-        new Login().setVisible(true);
+        try
+        {
+            String txtUser= userSign.getText();
+            PreparedStatement stmt= conn.prepareStatement("select user from login where user="+'"'+txtUser+'"');
+            ResultSet rs=stmt.executeQuery();
+            if(rs.next()) JOptionPane.showMessageDialog(this, "User already exists");
+            else
+            {
+                if(!passField.getText().isEmpty()&&(passField.getText() == null ? cPassField.getText() == null : passField.getText().equals(cPassField.getText())))
+                {
+                    PreparedStatement add=conn.prepareStatement("insert into login values(?,?)");
+                    add.setString(1, txtUser);
+                    add.setString(2, passField.getText());
+                    add.executeUpdate();
+                    this.dispose();
+                    new Login().setVisible(true);
+                }
+                else JOptionPane.showMessageDialog(this, "Please enter valid password");
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_signUpActionPerformed
 
     private void showPassActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_showPassActionPerformed
     {//GEN-HEADEREND:event_showPassActionPerformed
-        showPass(showPass,jPasswordField2);
+        showPass(showPass,cPassField);
     }//GEN-LAST:event_showPassActionPerformed
 
     private void showPass1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_showPass1ActionPerformed
@@ -298,6 +338,7 @@ public class SignUp extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel backLogin;
+    private javax.swing.JPasswordField cPassField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -305,11 +346,10 @@ public class SignUp extends javax.swing.JFrame
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPasswordField passField;
     private javax.swing.JCheckBox showPass;
     private javax.swing.JCheckBox showPass1;
     private javax.swing.JButton signUp;
+    private javax.swing.JTextField userSign;
     // End of variables declaration//GEN-END:variables
 }

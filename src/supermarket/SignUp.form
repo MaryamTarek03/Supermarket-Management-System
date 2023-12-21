@@ -98,12 +98,12 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="showPass" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jPasswordField2" alignment="0" min="-2" pref="284" max="-2" attributes="0"/>
+                              <Component id="cPassField" alignment="0" min="-2" pref="284" max="-2" attributes="0"/>
                               <Component id="jLabel4" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                                   <Component id="showPass1" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jTextField1" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="userSign" alignment="1" max="32767" attributes="0"/>
                                       <Component id="passField" max="32767" attributes="0"/>
                                       <Component id="jLabel2" pref="284" max="32767" attributes="0"/>
                                       <Component id="jLabel3" alignment="0" min="-2" pref="88" max="-2" attributes="0"/>
@@ -134,7 +134,7 @@
                       <EmptySpace pref="39" max="32767" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTextField1" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="userSign" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -144,7 +144,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPasswordField2" min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="cPassField" min="-2" pref="36" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="showPass" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -164,7 +164,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField1">
+            <Component class="javax.swing.JTextField" name="userSign">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -210,7 +210,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="signUpActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JPasswordField" name="jPasswordField2">
+            <Component class="javax.swing.JPasswordField" name="cPassField">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
