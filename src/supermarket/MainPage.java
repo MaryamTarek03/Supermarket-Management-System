@@ -1877,7 +1877,7 @@ public class MainPage extends javax.swing.JFrame
                         totalPrice.setText(tPrice+"$");
                         fillStockTable();
                     }
-                    else JOptionPane.showMessageDialog(this, "Insufficient Quantity");
+                    else JOptionPane.showMessageDialog(this, "Insufficient Quantity, Available quantity: "+rs.getInt(4));
                 }
             } catch (SQLException ex)
             {
