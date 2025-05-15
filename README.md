@@ -8,13 +8,18 @@ An app for inventory and sales management using **Java**.
 Just a landing screen with some contact info and pretty visuals
 ![image](https://github.com/user-attachments/assets/2f4ea61a-8c75-4dca-91f9-4f40e5c19c8d)
 # Orders screen
+Here you can order some items from stock
 ![image](https://github.com/user-attachments/assets/1912a181-4914-48ed-a23b-74206f1b8d0a)
 ![image](https://github.com/user-attachments/assets/2eb632f1-7faf-4fb9-88b2-ffe6ad944af5)
 # Billing screen
+A printable billing with all items and the total cost
 ![image](https://github.com/user-attachments/assets/41ec2312-ae4b-47b5-9094-23a7e69773e5)
 # Add product screen
+To add a new product to the stock or  update existing products
 ![image](https://github.com/user-attachments/assets/39576a0b-ea48-4137-b145-a40efdb05f70)
 # Stock screen
+List of all products currently in stock, you can search using anything like ID, name, or category
 ![image](https://github.com/user-attachments/assets/f99aaf0f-da24-4cab-b70a-3bb9d9bb3a24)
 # Staff screen
+List of all staff who work in the supermarket, we can edit, add, or delete
 ![image](https://github.com/user-attachments/assets/eb4b7748-7a6a-415a-936a-47ed76e8eb64)
